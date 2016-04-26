@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>DOM Art chapter4</title>
+<link rel='stylesheet' href='styles/layout.css'media='screen'/>
+</head>
+<body>
+<h1>DOM TEST chapter5</h1>
+
+<p id='description'>平稳退化+分离JS+向后兼容+性能考虑</p>
+<ul>
+	<li>
+	<a href='http://www.baidu.com'  class='popup'>pop1 </a>
+	</li>
+	<li>
+	<a href='http://www.baidu.com'  class='popup'>pop2 </a>
+	</li>
+	<li>
+	<a href='http://www.baidu.com'  class='popup'>pop3 </a>
+	</li>
+	<li>
+	<a href='http://www.baidu.com' onclick="popUp(this.getAttribute('href')); return false;"  >popUp Example</a>
+	</li>
+</ul>
+
+<script type='text/javascript' src='scripts/pop.js'></script>
+<!-- <p>test</p>
+     <p>test</p>
+     <p>test</p> -->
+</body>
+</html>	
+
