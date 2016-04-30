@@ -28,7 +28,7 @@ function stripeTables(){
 		rows = tables[i].getElementsByTagName('tr');
 		for (var j=0; j<rows.length; j++){
 			if (odd == true){
-				addClass (rows[j],"odd");      
+				addClass (rows[j],"newcss");      
 				odd = false;
 			}else{
 				odd = true;

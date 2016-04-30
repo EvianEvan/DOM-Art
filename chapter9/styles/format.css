@@ -35,6 +35,6 @@ tr:nth-child(even){background-color:#fff;}*/
 } */
 
 /*新增，用于改进版奇偶行样式的addclass*/
-.odd {
+.newcss {
 	background-color:#fdc;
 }
