@@ -97,13 +97,18 @@ function prepareSlideshow() {
 	var intro = document.getElementById('intro');
 	var slideshow = document.createElement('div');
 	slideshow.setAttribute('id','slideshow');
+	var frame = document.createElement('img');
+	frame.setAttribute('src','images/frame.gif');
+	frame.setAttribute('alt','');
+	frame.setAttribute('id','frame');
+	slideshow.appendChild(frame);
 	var preview = document.createElement('img');
 	preview.setAttribute('src','images/slideshow.gif');
 	preview.setAttribute('alt','a imge waits you');
 	preview.setAttribute('id','preview');
 	slideshow.appendChild(preview);
 	insertAfter(slideshow,intro);
-	var links = intro.getElementsByTagName('a');
+	var links = document.getElementsByTagName('a');
 	var destination;
 	for (var i=0; i<links.length; i++) {
 		links[i].onmouseover = function() {
@@ -114,7 +119,7 @@ function prepareSlideshow() {
 			if (destination.indexOf('about.html') != -1) {
 				moveElement('preview',-150,0,5);
 			}
-			if (destination.indexOf('photo.html') != -1) {
+			if (destination.indexOf('photos.html') != -1) {
 				moveElement('preview',-300,0,5);
 			}
 			if (destination.indexOf('live.html') != -1) {
