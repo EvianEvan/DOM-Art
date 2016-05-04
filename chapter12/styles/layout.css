@@ -94,3 +94,8 @@ article img {
 	left: 0;
 	z-index: 99;
 }
+
+/*12.5.3*/
+#imagegallery li {
+	display: inline;
+}
