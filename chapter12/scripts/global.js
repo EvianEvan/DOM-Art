@@ -345,7 +345,6 @@ function isFilled(field) {
 function isEmail(field) {
 	return (field.value.indexOf('@') !=-1 && field.value.indexOf('.') != -1);
 }
-
 function validateForm(whichform) {
 	for (var i=0; i<whichform.elements.length; i++) {
 		var element = whichform.elements[i];
@@ -366,8 +365,7 @@ function validateForm(whichform) {
 	}
 	return true;
 }
-
-// 遍历form对象，并将其传给resetFields函数
+// 遍历form对象，并将其传给resetFields函数和validateForm函数
 function prepareForms() {
 	for (var i=0; i<document.forms.length; i++) {
 		var thisform = document.forms[i];
