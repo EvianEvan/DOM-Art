@@ -223,3 +223,158 @@ function prepareGallery(){
 }
 addLoadEvent (prepareGallery);                                  
 
+
+// live.html
+//奇偶行样式
+function stripeTables(){
+	if (!document.getElementsByTagName) return false;
+	var tables = document.getElementsByTagName('table');
+	var odd,rows;
+	for (var i=0; i<tables.length; i++){
+		odd = false;
+		rows = tables[i].getElementsByTagName('tr');
+		for (var j=0; j<rows.length; j++){
+			if (odd == true){
+				addClass (rows[j],"odd");      
+				odd = false;
+			}else{
+				odd = true;
+			}
+		}
+	}
+}
+// 悬停行加粗(有改动)
+function highLightRows(){
+	if(!document.getElementsByTagName) return false;
+	var rows = document.getElementsByTagName('tr');
+	for (var i=0; i<rows.length; i++){
+		rows[i].oldClassName = rows[i].className;
+		rows[i].onmouseover = function(){
+			addClass(this,'highlight');
+		}
+		rows[i].onmouseout = function() {
+			this.className = this.oldClassName;
+		}
+	}
+}
+//显示缩略语列表
+function displayAbbreviations(){
+	if(!document.getElementsByTagName || !document.createElement || !document.createTextNode) 
+		return false;
+	var abbreviations = document.getElementsByTagName('abbr');
+	if (abbreviations.length <1) return false;
+	var defs = new Array();
+	for (var i=0; i<abbreviations.length; i++){
+		var current_abbr = abbreviations[i];
+		var definition = current_abbr.getAttribute('title');
+		var key = current_abbr.lastChild.nodeValue;
+		defs[key] = definition;
+	}
+	var dlist = document.createElement('dl');
+	for (key in defs){
+		var definition = defs[key];
+		var dtitle = document.createElement('dt');
+		var dtilte_text = document.createTextNode(key);
+		dtitle.appendChild(dtilte_text);
+		var ddesc = document.createElement('dd');
+		var ddesc_text = document.createTextNode(definition);
+		ddesc.appendChild(ddesc_text);
+		dlist.appendChild(dtitle);
+		dlist.appendChild(ddesc);
+	}
+	if (dlist.childNodes.length < 1) return false;
+		var header = document.createElement('h3');
+		var header_text = document.createTextNode('缩略词列表');
+		header.appendChild(header_text);
+		var articles = document.getElementsByTagName('article');
+		if (articles.length == 0) return false;
+		var container = articles[0];
+		container.appendChild(header);
+		container.appendChild(dlist);
+}
+addLoadEvent(stripeTables);
+addLoadEvent(highLightRows);
+addLoadEvent(displayAbbreviations);
+
+// contact.html
+// 点击label标签后将焦点移至表单(IE默认支持)
+function focusLabels() {
+	if (!document.getElementsByTagName) return false;
+	var labels = document.getElementsByTagName('label');
+	for (var i=0; i<labels.length; i++) {
+		if (!labels[i].getAttribute('for')) continue;
+		labels[i].onclick = function() {
+			var id = this.getAttribute('for');
+			if (!document.getElementById(id)) return false;
+			var element = document.getElementById(id);
+			element.focus();
+		}
+	}
+}
+addLoadEvent(focusLabels);
+// 显示占位符（placeholder属性），IE默认不支持
+function resetFields(whichform) {
+	for (var i=0; i<whichform.elements.length; i++) {
+		var element = whichform.elements[i];
+		if (element.type == 'submit') continue;
+		var check = element.placeholder ||element.getAttribute('placeholder');
+		if (!check) continue;
+	element.onfocus = function() {
+	    var text = this.placeholder || this.getAttribute('placeholder');
+	    if (this.value == text) {
+		this.classname = '';
+		this.value = '';
+		}
+	}
+	element.onblur = function() {
+		if (this.value == ''){
+			this.className = 'placeholder';
+			this.value = this.placeholder || this.getAttribute('placeholder');
+		}
+	}
+	element.onblur();
+  }
+}
+
+// 检查表单输入
+function isFilled(field) {
+	if (field.value.replace(' ','').length === 0) return false;
+	var placeholder = field.placeholder || field.getAttribute('placeholder');
+	return (field.value != placeholder);
+}
+function isEmail(field) {
+	return (field.value.indexOf('@') !=-1 && field.value.indexOf('.') != -1);
+}
+
+function validateForm(whichform) {
+	for (var i=0; i<whichform.elements.length; i++) {
+		var element = whichform.elements[i];
+		if (element.getAttribute('required') === 'required') {  
+			// 为什么把element.getAttribute('required')
+			// 写成element.required就不能正常运行呢
+			if (!isFilled(element)) {
+				alert ('请填写'+element.name+'项');
+				return false;
+			}
+		}
+		if(element.type === 'email') {
+			if (!isEmail(element)) {
+				alert('此'+element.name+'项必须正确填写');
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+// 遍历form对象，并将其传给resetFields函数
+function prepareForms() {
+	for (var i=0; i<document.forms.length; i++) {
+		var thisform = document.forms[i];
+		resetFields(thisform);
+		thisform.onsubmit = function() {
+			return validateForm(this);
+		}
+	}
+}
+addLoadEvent(prepareForms);

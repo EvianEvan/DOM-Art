@@ -65,3 +65,18 @@ header nav a.here:active{
 	color: #eef;
 	background-color: #799;
 }
+
+/*live.html*/
+tr.odd td {
+	color: #223;
+	background-color: #ec8;
+}
+tr.hightlight td {
+	color: #223;
+	background-color: #cba;
+}
+
+/*contact.html*/
+input.placeholder,textarea.placeholder {
+	color:grey;
+}
