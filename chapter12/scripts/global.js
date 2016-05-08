@@ -365,14 +365,75 @@ function validateForm(whichform) {
 	}
 	return true;
 }
-// 遍历form对象，并将其传给resetFields函数和validateForm函数
+// 遍历form对象，并将其传给resetFields函数和validateForm函数和submitFormWithAjax函数。
 function prepareForms() {
 	for (var i=0; i<document.forms.length; i++) {
 		var thisform = document.forms[i];
 		resetFields(thisform);
 		thisform.onsubmit = function() {
-			return validateForm(this);
+			if (!validateForm(this)) return false;
+			var article = document.getElementsByTagName('article')[0];
+			if (submitFormWithAjax(this,article)) return false;
+			return ture;
 		}
 	}
 }
 addLoadEvent(prepareForms);
+
+// Ajax
+// 第7章的getHTTPObject函数
+function getHTTPObject(){
+	if(typeof XMLHttpRequest == 'undefined')
+		XMLHttpRequest = function(){
+			try {
+				return new ActiveXObject('Msxml2.XMLHTTP.6.0');}
+				catch (e) {}
+			try {
+				return new ActiveXObject('Msxml2.XMLHTTP.3.0');}
+				catch (e) {}
+			try {
+				return new ActiveXObject('Msxml2.XMLHTTP');}
+				catch (e) {}
+				return false;				
+			}
+	return new XMLHttpRequest();
+}
+function displayAjaxLoading(element) {
+	while (element.hasChildNodes()) {
+		element.removeChild(element.lastChild);
+	}
+	var content = document.createElement('img');
+	content.setAttribute('src','../images/loading.gif');
+	content.setAttribute('alt','loading...');
+	element.appendChild(content);
+}
+function submitFormWithAjax(whichform,thetarget) {
+	var request = getHTTPObject();
+	if (!request) { return false; }
+	displayAjaxLoading(thetarget);
+	var dataParts = [];
+	var element;
+	for (var i=0; i<whichform.length; i++) {
+		element = whichform.elements[i];
+		dataParts[i] = element.name +'='+encodeURIComponent(element.value);
+	}
+	var data = dataParts.join('&');
+	request.open('POST',whichform.getAttribute('action'),true);
+	request.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+	request.onreadystatechange = function () {
+		if (request.readystate == 4) {
+			if (request.status == 200 ||request.status ==0) {
+				var matches = request.responseText.match(/<article>([\s\S]+)<\/article>/);
+				if (matches.length >0) {
+					thetarget.innerHTML = matches[1];
+				} else {
+					thetarget.innerHTML = '<p>糟糕，这里出现了一个错误</p>';
+				}
+			} else {
+				thetarget.innerHTML = '<p>' + request.statusText + '<p>';
+			}
+		}
+	};
+	request.send(data);
+	return true;
+};
